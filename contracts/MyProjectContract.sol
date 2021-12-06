@@ -7,8 +7,14 @@ contract MyProjectContract {
     constructor(){
         console.log("Hello World.");
     }
+    //POST
     function wave() public{
         totalWaves +=1;
         console.log("Just Waved. totalWaves = %s", totalWaves);
+    }
+
+    //GET
+    function getTotalWaves() public view returns (uint) {
+        return totalWaves;        
     }
 }
