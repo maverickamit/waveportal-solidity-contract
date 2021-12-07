@@ -13,6 +13,8 @@ contract MyProjectContract {
     function wave() public{
         totalWaves +=1;
         console.log("Just Waved. totalWaves = %s", totalWaves);
+        console.log("Waved by = %s", msg.sender);
+
     }
     //GET
     function getTotalWaves() public view returns (uint) {
