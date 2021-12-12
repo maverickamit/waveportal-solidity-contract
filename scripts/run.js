@@ -48,6 +48,10 @@ const main = async () => {
     hre.ethers.utils.formatEther(contractBalance)
   );
 
+  //Send wave
+  waveTxn = await ProjectContract.wave("Some message from me.");
+  await waveTxn.wait();
+
   //Waving by random person
   waveTxn = await ProjectContract.connect(randomPerson).wave(
     "Some message from random person."
@@ -59,6 +63,15 @@ const main = async () => {
   //Get total waves
   waveCount = await ProjectContract.getTotalWaves();
   console.log("Total Waves:", waveCount.toString());
+
+  //Get the contract balance
+  contractBalance = await hre.ethers.provider.getBalance(
+    ProjectContract.address
+  );
+  console.log(
+    "Contract Balance: ",
+    hre.ethers.utils.formatEther(contractBalance)
+  );
   console.log(allWaves);
 };
 
