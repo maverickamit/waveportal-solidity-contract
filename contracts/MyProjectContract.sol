@@ -6,7 +6,9 @@ import "hardhat/console.sol";
 
 contract MyProjectContract {
     uint totalWaves;    
-    
+
+    uint256 private seed;
+
     event NewWave(address indexed from, uint256 timestamp, string message);
 
     struct Wave {
@@ -19,6 +21,8 @@ contract MyProjectContract {
 
     constructor () payable {
         console.log("Hello World.");
+         //Generating an initial random number
+        seed = (block.timestamp + block.difficulty) % 100;
     }
     //POST
     function wave(string memory _message) public {
@@ -26,13 +30,20 @@ contract MyProjectContract {
         waves.push(Wave(msg.sender, _message, block.timestamp));
         emit NewWave(msg.sender, block.timestamp, _message);
 
-        uint256 appreciationMoney = 0.00001 ether;
+        //Generating a new random number
+         seed = (block.difficulty + block.timestamp + seed) % 100;
 
-        require(
-            appreciationMoney <= address(this).balance, "Trying to withdraw more money than the contract has."
-        );
-        (bool success, ) = (msg.sender).call{value: appreciationMoney}("");
-        require(success, "Failed to withdraw money from contract.");
+        console.log("Random # generated: %d", seed);
+        // 50% chance of win
+        if(seed<=50){
+            console.log("%s won!", msg.sender);
+            
+            uint256 appreciationMoney = 0.00001 ether;
+
+            require(appreciationMoney <= address(this).balance, "Trying to withdraw more money than the contract has.");
+            (bool success, ) = (msg.sender).call{value: appreciationMoney}("");
+            require(success, "Failed to withdraw money from contract.");
+        }
 
     }
     //GET
