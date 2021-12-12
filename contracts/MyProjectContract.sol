@@ -19,6 +19,8 @@ contract MyProjectContract {
     
     Wave[] waves; // A variable that stores an array of structs.
 
+    mapping(address => uint256) public lastWavedAt;
+
     constructor () payable {
         console.log("Hello World.");
          //Generating an initial random number
@@ -26,6 +28,12 @@ contract MyProjectContract {
     }
     //POST
     function wave(string memory _message) public {
+        console.log("Last waved at : %d",lastWavedAt[msg.sender]);
+        
+        require(lastWavedAt[msg.sender] + 15 minutes <= block.timestamp,"wait 15 min");
+        
+        lastWavedAt[msg.sender]=block.timestamp;
+
         totalWaves +=1;
         waves.push(Wave(msg.sender, _message, block.timestamp));
         emit NewWave(msg.sender, block.timestamp, _message);
