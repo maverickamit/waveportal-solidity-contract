@@ -17,7 +17,7 @@ contract MyProjectContract {
     
     Wave[] waves; // A variable that stores an array of structs.
 
-    constructor(){
+    constructor () payable {
         console.log("Hello World.");
     }
     //POST
@@ -25,6 +25,15 @@ contract MyProjectContract {
         totalWaves +=1;
         waves.push(Wave(msg.sender, _message, block.timestamp));
         emit NewWave(msg.sender, block.timestamp, _message);
+
+        uint256 appreciationMoney = 0.00001 ether;
+
+        require(
+            appreciationMoney <= address(this).balance, "Trying to withdraw more money than the contract has."
+        );
+        (bool success, ) = (msg.sender).call{value: appreciationMoney}("");
+        require(success, "Failed to withdraw money from contract.");
+
     }
     //GET
     function getAllWaves() public view returns (Wave[] memory) {
